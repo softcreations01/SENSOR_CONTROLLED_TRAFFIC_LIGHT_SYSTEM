@@ -1,0 +1,287 @@
+// LED pattern
+const int RED_PIN_1 = 4;
+const int YELLOW_PIN_1 = 3;
+const int GREEN_PIN_1 = 2;
+const int RED_PIN_2 = 8;
+const int YELLOW_PIN_2 = 9;
+const int GREEN_PIN_2 = 10;
+const int RED_PIN_3 = 7;
+const int YELLOW_PIN_3 = 6;
+const int GREEN_PIN_3 = 5;
+
+// Ultrasonic Sensor pins
+const int trigPin1 = A5;
+const int echoPin1 = A4;
+const int trigPin2 = A1;
+const int echoPin2 = A0;
+const int trigPin3 = A3;
+const int echoPin3 = A2;
+
+// Sensor variables
+int presentSensorId = 0; // Initial value
+int nextSensorId = 1;    // Initial value
+int sensorCount = 4;
+
+// Time constants
+const long greenDelay = 10000; // 10 sec
+const long yellowDelay = 4000; // 4 sec
+
+//*************************************************************************
+void init_Light()
+{
+  pinMode(RED_PIN_1, OUTPUT);
+  pinMode(YELLOW_PIN_1, OUTPUT);
+  pinMode(GREEN_PIN_1, OUTPUT);
+  pinMode(RED_PIN_2, OUTPUT);
+  pinMode(YELLOW_PIN_2, OUTPUT);
+  pinMode(GREEN_PIN_2, OUTPUT);
+  pinMode(RED_PIN_3, OUTPUT);
+  pinMode(YELLOW_PIN_3, OUTPUT);
+  pinMode(GREEN_PIN_3, OUTPUT);
+
+  // Set initial state to RED for all signals
+  digitalWrite(RED_PIN_1, HIGH);
+  digitalWrite(YELLOW_PIN_1, LOW);
+  digitalWrite(GREEN_PIN_1, LOW);
+  digitalWrite(RED_PIN_2, HIGH);
+  digitalWrite(YELLOW_PIN_2, LOW);
+  digitalWrite(GREEN_PIN_2, LOW);
+  digitalWrite(RED_PIN_3, HIGH);
+  digitalWrite(YELLOW_PIN_3, LOW);
+  digitalWrite(GREEN_PIN_3, LOW);
+}
+
+//*************************************************************************
+void switchLane1ToRed()
+{
+  digitalWrite(RED_PIN_1, HIGH);
+  digitalWrite(YELLOW_PIN_1, LOW);
+  digitalWrite(GREEN_PIN_1, LOW);
+}
+
+void switchLane1ToYellow()
+{
+  digitalWrite(RED_PIN_1, LOW);
+  digitalWrite(YELLOW_PIN_1, HIGH);
+  digitalWrite(GREEN_PIN_1, LOW);
+}
+
+void switchLane1ToGreen()
+{
+  digitalWrite(RED_PIN_1, LOW);
+  digitalWrite(YELLOW_PIN_1, LOW);
+  digitalWrite(GREEN_PIN_1, HIGH);
+}
+
+//*************************************************************************
+void switchLane2ToRed()
+{
+  digitalWrite(RED_PIN_2, HIGH);
+  digitalWrite(YELLOW_PIN_2, LOW);
+  digitalWrite(GREEN_PIN_2, LOW);
+}
+
+void switchLane2ToYellow()
+{
+  digitalWrite(RED_PIN_2, LOW);
+  digitalWrite(YELLOW_PIN_2, HIGH);
+  digitalWrite(GREEN_PIN_2, LOW);
+}
+
+void switchLane2ToGreen()
+{
+  digitalWrite(RED_PIN_2, LOW);
+  digitalWrite(YELLOW_PIN_2, LOW);
+  digitalWrite(GREEN_PIN_2, HIGH);
+}
+
+//*************************************************************************
+void switchLane3ToRed()
+{
+  digitalWrite(RED_PIN_3, HIGH);
+  digitalWrite(YELLOW_PIN_3, LOW);
+  digitalWrite(GREEN_PIN_3, LOW);
+}
+
+void switchLane3ToYellow()
+{
+  digitalWrite(RED_PIN_3, LOW);
+  digitalWrite(YELLOW_PIN_3, HIGH);
+  digitalWrite(GREEN_PIN_3, LOW);
+}
+
+void switchLane3ToGreen()
+{
+  digitalWrite(RED_PIN_3, LOW);
+  digitalWrite(YELLOW_PIN_3, LOW);
+  digitalWrite(GREEN_PIN_3, HIGH);
+}
+//*************************************************************************
+void sensorIdUpdate()
+{
+  int I;
+  int busyFlag = 0; // reset value
+
+  // Checking next sensors
+  for (I = presentSensorId; I < sensorCount; I++)
+  {
+    if ((I != presentSensorId) && (digitalRead(echoPin1) == LOW))
+    {
+      nextSensorId = I;
+      busyFlag = 1;
+      break;
+    }
+  }
+
+  // Checking previous sensors
+  if (busyFlag == 0)
+  { // No busy road found
+    // Checking previous sensors
+    for (I = 0; I < presentSensorId; I++)
+    {
+      if ((I != presentSensorId) && (digitalRead(echoPin1) == LOW))
+      {
+        nextSensorId = I;
+        busyFlag = 1;
+        break;
+      }
+    }
+  }
+
+  // If nothing detected, regular update
+  if (busyFlag == 0)
+  {
+    nextSensorId = (presentSensorId + 1) % sensorCount;
+  }
+}
+
+//*************************************************************************
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println(" ------- Automatic Traffic Light Control based on Density --------");
+
+  // LEDs Init
+  pinMode(RED_PIN_1, OUTPUT);
+  pinMode(YELLOW_PIN_1, OUTPUT);
+  pinMode(GREEN_PIN_1, OUTPUT);
+  pinMode(RED_PIN_2, OUTPUT);
+  pinMode(YELLOW_PIN_2, OUTPUT);
+  pinMode(GREEN_PIN_2, OUTPUT);
+  pinMode(RED_PIN_3, OUTPUT);
+  pinMode(YELLOW_PIN_3, OUTPUT);
+  pinMode(GREEN_PIN_3, OUTPUT);
+
+  switchLane1ToRed();
+  switchLane2ToRed();
+  switchLane3ToRed();
+
+  pinMode(trigPin1, OUTPUT);
+  pinMode(echoPin1, INPUT);
+  pinMode(trigPin2, OUTPUT);
+  pinMode(echoPin2, INPUT);
+  pinMode(trigPin3, OUTPUT);
+  pinMode(echoPin3, INPUT);
+}
+
+//*************************************************************************
+void loop()
+{
+  // Measure distance using HR-SC04 ultrasonic sensor 1
+  digitalWrite(trigPin1, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin1, LOW);
+  long duration1 = pulseIn(echoPin1, HIGH);
+  int distance_cm1 = duration1 / 58; // Calculate the distance in centimeters
+
+  // Measure distance using HR-SC04 ultrasonic sensor 2
+  digitalWrite(trigPin2, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin2, LOW);
+  long duration2 = pulseIn(echoPin2, HIGH);
+  int distance_cm2 = duration2 / 58; // Calculate the distance in centimeters
+
+  // Measure distance using HR-SC04 ultrasonic sensor 3
+  digitalWrite(trigPin3, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin3, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin3, LOW);
+  long duration3 = pulseIn(echoPin3, HIGH);
+  int distance_cm3 = duration3 / 58; // Calculate the distance in centimeters
+
+  // Determine the signal pattern for each lane based on distance
+  if (distance_cm1 = 50 && distance_cm1 > 100)
+  {
+    switchLane1ToRed();
+    delay(greenDelay);
+    sensorIdUpdate();
+  }
+  else if (distance_cm1 <= 20 && distance_cm1 >= 50)
+  {
+    switchLane1ToYellow();
+    delay(yellowDelay);
+    switchLane1ToRed();
+    presentSensorId = nextSensorId;
+    sensorIdUpdate();
+  }
+  else
+  {
+    switchLane1ToGreen();
+    delay(greenDelay);
+    switchLane1ToYellow();
+    presentSensorId = nextSensorId;
+    sensorIdUpdate();
+  }
+
+  if (distance_cm2 = 50 && distance_cm2 > 100)
+  {
+    switchLane2ToRed();
+    delay(greenDelay);
+    sensorIdUpdate();
+  }
+  else if (distance_cm2 <= 20 && distance_cm2 >= 50)
+  {
+    switchLane2ToYellow();
+    delay(yellowDelay);
+    switchLane2ToRed();
+    presentSensorId = nextSensorId;
+    sensorIdUpdate();
+  }
+  else
+  {
+    switchLane2ToGreen();
+    delay(greenDelay);
+    switchLane2ToYellow();
+    presentSensorId = nextSensorId;
+    sensorIdUpdate();
+  }
+
+  if (distance_cm3 = 50 && distance_cm3 > 100)
+  {
+    switchLane3ToRed();
+    delay(greenDelay);
+    sensorIdUpdate();
+  }
+  else if (distance_cm3 <= 20 && distance_cm3 >= 50)
+  {
+    switchLane3ToYellow();
+    delay(yellowDelay);
+    switchLane3ToRed();
+    presentSensorId = nextSensorId;
+    sensorIdUpdate();
+  }
+  else
+  {
+    switchLane3ToGreen();
+    delay(greenDelay);
+    switchLane3ToYellow();
+    presentSensorId = nextSensorId;
+    sensorIdUpdate();
+  }
+}
+
