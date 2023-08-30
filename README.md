@@ -22,4 +22,4 @@
 
 **Efficient Traffic Flow:** The sensor-controlled system optimizes traffic signal timing by adapting to real-time traffic conditions, leading to smoother traffic flow. Reduced Waiting Times: Vehicles experience shorter waiting times at intersections, improving overall traffic efficiency. Real-Time Adaptation: The system dynamically adjusts signal timings, preventing unnecessary delays and ensuring optimal usage of road space. Expandable: The project can be enhanced by incorporating additional features like pedestrian crossings or integration with a centralized traffic management system.
 
-**Note:** This overview provides a general idea of the project. To fully implement the system, you will need to provide detailed instructions for the circuit connections and code specific to the Arduino Nano and HC-SR04 sensor.
+**Note:** This overview provides a general idea of the project. To fully implement the system, you will need to use detailed instructions for the circuit connections and code specific to the Arduino Nano and HC-SR04 sensor.
