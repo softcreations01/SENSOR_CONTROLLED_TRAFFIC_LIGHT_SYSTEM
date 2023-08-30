@@ -215,73 +215,43 @@ void loop()
   int distance_cm3 = duration3 / 58; // Calculate the distance in centimeters
 
   // Determine the signal pattern for each lane based on distance
-  if (distance_cm1 = 50 && distance_cm1 > 100)
-  {
-    switchLane1ToRed();
-    delay(greenDelay);
-    sensorIdUpdate();
-  }
-  else if (distance_cm1 <= 10 && distance_cm1 >= 50)
-  {
-    switchLane1ToYellow();
-    delay(yellowDelay);
-    switchLane1ToRed();
-    presentSensorId = nextSensorId;
-    sensorIdUpdate();
-  }
-  else
+  if (distance_cm1 <= 10) // Less than or equal to 10 cm
   {
     switchLane1ToGreen();
-    delay(greenDelay);
+  }
+  else if (distance_cm1 <= 50) // Less than or equal to 50 cm
+  {
     switchLane1ToYellow();
-    presentSensorId = nextSensorId;
-    sensorIdUpdate();
+  }
+  else // Greater than 50 cm
+  {
+    switchLane1ToRed();
   }
 
-  if (distance_cm2 = 50 && distance_cm2 > 100)
-  {
-    switchLane2ToRed();
-    delay(greenDelay);
-    sensorIdUpdate();
-  }
-  else if (distance_cm2 <= 20 && distance_cm2 >= 50)
-  {
-    switchLane2ToYellow();
-    delay(yellowDelay);
-    switchLane2ToRed();
-    presentSensorId = nextSensorId;
-    sensorIdUpdate();
-  }
-  else
+  if (distance_cm2 <= 10) // Less than or equal to 10 cm
   {
     switchLane2ToGreen();
-    delay(greenDelay);
+  }
+  else if (distance_cm2 <= 50) // Less than or equal to 50 cm
+  {
     switchLane2ToYellow();
-    presentSensorId = nextSensorId;
-    sensorIdUpdate();
+  }
+  else // Greater than 50 cm
+  {
+    switchLane2ToRed();
   }
 
-  if (distance_cm3 = 50 && distance_cm3 > 100)
-  {
-    switchLane3ToRed();
-    delay(greenDelay);
-    sensorIdUpdate();
-  }
-  else if (distance_cm3 <= 10 && distance_cm3 >= 50)
-  {
-    switchLane3ToYellow();
-    delay(yellowDelay);
-    switchLane3ToRed();
-    presentSensorId = nextSensorId;
-    sensorIdUpdate();
-  }
-  else
+  if (distance_cm3 <= 10) // Less than or equal to 10 cm
   {
     switchLane3ToGreen();
-    delay(greenDelay);
+  }
+  else if (distance_cm3 <= 50) // Less than or equal to 50 cm
+  {
     switchLane3ToYellow();
-    presentSensorId = nextSensorId;
-    sensorIdUpdate();
+  }
+  else // Greater than 50 cm
+  {
+    switchLane3ToRed();
   }
 }
 
